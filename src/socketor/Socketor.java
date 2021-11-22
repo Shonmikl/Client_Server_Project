@@ -1,6 +1,6 @@
 package socketor;
 
-import phone.Phone;
+import phone.PhoneService;
 
 public class Socketor {
     public static void main(String[] args) {
@@ -21,23 +21,23 @@ public class Socketor {
     }
 
     private void runClient(String ip, String port, String digit1, String digit2) {
-        Phone phone = new Phone(ip, port);
-        phone.writeLine(digit1);
-        phone.writeLine(digit2);
-        String answer = phone.readLine();
+        PhoneService phoneService = new PhoneService(ip, port);
+        phoneService.writeLine(digit1);
+        phoneService.writeLine(digit2);
+        String answer = phoneService.readLine();
         System.out.println(answer);
-        phone.close();
+        phoneService.close();
     }
 
     private void runServer(String port, String operation) {
-        Phone phoneServer = new Phone(port);
+        PhoneService phoneServiceServer = new PhoneService(port);
         System.out.println("Server with " + operation + " on " + port + " port was ran");
         while (true) {
-            Phone phone = new Phone(phoneServer);
+            PhoneService phoneService = new PhoneService(phoneServiceServer);
             System.out.println("Client accepted");
             new Thread(() -> {
-                String a = phone.readLine();
-                String b = phone.readLine();
+                String a = phoneService.readLine();
+                String b = phoneService.readLine();
                 double result = calculate(operation, a, b);
                 String message = a + " " + operation + " " + b + " = " + result;
                 try {
@@ -45,9 +45,9 @@ public class Socketor {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                phone.writeLine(message);
+                phoneService.writeLine(message);
                 System.out.println("Accepted " + message);
-                phone.close();
+                phoneService.close();
             }).start();
         }
     }

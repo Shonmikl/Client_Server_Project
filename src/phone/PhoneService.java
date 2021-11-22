@@ -4,19 +4,19 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Phone {
+public class PhoneService {
     private ServerSocket server;
     private Socket client;
     private BufferedReader reader;
     private BufferedWriter writer;
 
-    public Phone(Phone phoneServer) {
+    public PhoneService(PhoneService phoneServiceServer) {
         server = null;
-        client = phoneServer.accept();
+        client = phoneServiceServer.accept();
         createStreams();
     }
 
-    public Phone(String port) {
+    public PhoneService(String port) {
         try {
             server = new ServerSocket(Integer.parseInt(port));
         } catch (IOException e) {
@@ -24,7 +24,7 @@ public class Phone {
         }
     }
 
-    public Phone(String ip, String port) {
+    public PhoneService(String ip, String port) {
         try {
             client = new Socket(ip, Integer.parseInt(port));
             createStreams();
