@@ -5,14 +5,14 @@ public class Socketor {
         if (args.length < 3) {
             System.out.println("""
                     Usage:\r
-                    java socketor.Socketor server 8000 2 /\r
+                    java socketor.Socketor server 8000 /\r
                     java socketor.Socketor client 127.0.0.1 8000\r
                     """);
             return;
         }
         Socketor socketor = new Socketor();
         if (args[0].equals("server")) {
-            socketor.runServer(args[1], args[2], args[3]);
+            socketor.runServer(args[1], args[2]);
         } else if (args[0].equals("client")) {
             socketor.runClient(args[1], args[2], args[3], args[4]);
         }
@@ -27,14 +27,42 @@ public class Socketor {
         phone.close();
     }
 
-    private void runServer(String port, String threadsCount, String operation) {
-        int threads = Integer.parseInt(threadsCount);
-        Phone phone = new Phone(port);
-        ServerPhone[] serverPhones = new ServerPhone[threads];
-        for (int i = 0; i < threads; i++) {
-            serverPhones[i] = new ServerPhone(new Phone(phone), operation);
-            serverPhones[i].run();
+    private void runServer(String port, String operation) {
+        Phone phoneServer = new Phone(port);
+        System.out.println("Server with " + operation + " on " + port + " port was ran");
+        while (true) {
+            Phone phone = new Phone(phoneServer);
+            System.out.println("Client accepted");
+            new Thread(() -> {
+                String a = phone.readLine();
+                String b = phone.readLine();
+                double result = calculate(operation, a, b);
+                String message = a + " " + operation + " " + b + " = " + result;
+                try {
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                phone.writeLine(message);
+                System.out.println("Accepted " + message);
+                phone.close();
+            }).start();
         }
-        System.out.println("Server is working on a port " + port + ", operation is " + operation);
+    }
+
+    private double calculate(String operation, String x, String y) throws ArithmeticException {
+        double results = 0;
+        double a = Double.parseDouble(x);
+        double b = Double.parseDouble(y);
+        switch (operation) {
+            case "*" -> results = a * b;
+            case "/" -> results = a / b;
+            case "-" -> results = a - b;
+            case "+" -> results = a + b;
+            case "^" -> results = Math.pow(a, b);
+            case "%" -> results = a % b;
+            default -> System.out.println("This command isn't correct");
+        }
+        return results;
     }
 }

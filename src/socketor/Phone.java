@@ -5,13 +5,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Phone {
-    ServerSocket server;
-    Socket client;
-    BufferedReader reader;
-    BufferedWriter writer;
+    private ServerSocket server;
+    private Socket client;
+    private BufferedReader reader;
+    private BufferedWriter writer;
 
-    public Phone(Phone phone) {
-        this.server = phone.server;
+    public Phone(Phone phoneServer) {
+        this.server = phoneServer.server;
+        accept();
     }
 
     public Phone(String port) {
@@ -31,7 +32,7 @@ public class Phone {
         }
     }
 
-    public void accept() {
+    private void accept() {
         try {
             client = server.accept();
             createStreams();
@@ -42,8 +43,10 @@ public class Phone {
 
     private void createStreams() {
         try {
-            reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+            reader = new BufferedReader
+                        (new InputStreamReader(client.getInputStream()));
+            writer = new BufferedWriter
+                        (new OutputStreamWriter(client.getOutputStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
