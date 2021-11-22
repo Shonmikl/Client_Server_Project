@@ -44,9 +44,9 @@ public class Phone {
     private void createStreams() {
         try {
             reader = new BufferedReader
-                        (new InputStreamReader(client.getInputStream()));
+                    (new InputStreamReader(client.getInputStream()));
             writer = new BufferedWriter
-                        (new OutputStreamWriter(client.getOutputStream()));
+                    (new OutputStreamWriter(client.getOutputStream()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -76,6 +76,14 @@ public class Phone {
             writer.close();
             client.close();
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void closeServer() {
+        try {
+            server.close();
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
