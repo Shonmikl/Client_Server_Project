@@ -67,7 +67,9 @@ public class Phone {
 
     public void close() {
         try {
-            reader.close(); writer.close(); client.close();
+            reader.close();
+            writer.close();
+            client.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -2,7 +2,7 @@ package socketor;
 
 public class Socketor {
     public static void main(String[] args) {
-        if(args.length < 3 ) {
+        if (args.length < 3) {
             System.out.println("""
                     Usage:\r
                     java socketor.Socketor server 8000 /\r
@@ -11,9 +11,9 @@ public class Socketor {
             return;
         }
         Socketor socketor = new Socketor();
-        if(args[0].equals("server")) {
+        if (args[0].equals("server")) {
             socketor.runServer(args[1], args[2]);
-        } else if(args[0].equals("client")) {
+        } else if (args[0].equals("client")) {
             socketor.runClient(args[1], args[2], args[3], args[4]);
         }
     }
@@ -28,7 +28,7 @@ public class Socketor {
     }
 
     private void runServer(String port, String operation) {
-        Phone  phone = new Phone(port);
+        Phone phone = new Phone(port);
         System.out.println("Server is working on a port " + port + ", operation is " + operation);
         while (true) {
             phone.accept();
