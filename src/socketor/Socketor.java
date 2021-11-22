@@ -3,13 +3,14 @@ package socketor;
 import phone.PhoneService;
 
 public class Socketor {
-    public static void main(String[] args) {
-        if (args.length < 3) {
-            System.out.println("""
+    static String parameter = ("""
                     Usage:\r
                     java socketor.Socketor server 8000 /\r
                     java socketor.Socketor client 127.0.0.1 8000\r
                     """);
+    public static void main(String[] args) {
+        if (args.length < 3) {
+            System.out.println(parameter);
             return;
         }
         Socketor socketor = new Socketor();
