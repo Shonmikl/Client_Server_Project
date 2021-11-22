@@ -1,4 +1,4 @@
-package socketor;
+package phone;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -11,15 +11,16 @@ public class Phone {
     private BufferedWriter writer;
 
     public Phone(Phone phoneServer) {
-        this.server = phoneServer.server;
-        accept();
+        server = null;
+        client = phoneServer.accept();
+        createStreams();
     }
 
     public Phone(String port) {
         try {
             server = new ServerSocket(Integer.parseInt(port));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -28,16 +29,15 @@ public class Phone {
             client = new Socket(ip, Integer.parseInt(port));
             createStreams();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
-    private void accept() {
+    private Socket accept() {
         try {
-            client = server.accept();
-            createStreams();
+            return server.accept();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -48,7 +48,7 @@ public class Phone {
             writer = new BufferedWriter
                         (new OutputStreamWriter(client.getOutputStream()));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -56,9 +56,8 @@ public class Phone {
         try {
             return reader.readLine();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return "-1";
     }
 
     public void writeLine(String message) {
@@ -67,7 +66,7 @@ public class Phone {
             writer.newLine();
             writer.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -77,7 +76,7 @@ public class Phone {
             writer.close();
             client.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
